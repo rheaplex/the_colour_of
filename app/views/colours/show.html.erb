@@ -1,0 +1,7 @@
+<table class="colour-show">
+  <tr>
+    <%= render(:partial => "colours/colour", :object => @colour) %>
+  </tr>
+</table>
+<%= link_to '&larr;', colours_path %>&nbsp;<%= link_to '&uarr;', @colour.palette %>
+

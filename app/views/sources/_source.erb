@@ -1,0 +1,9 @@
+<h1><%= if link_title
+	  link_to source.name, source 
+	else
+	  source.name
+	end %></h1>
+<p>
+  <%= render(:partial => "palettes/palettes", 
+             :object => source.recent_palettes) %>
+</p>

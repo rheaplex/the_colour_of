@@ -1,0 +1,4 @@
+<%= render(:partial => "sources/source", :object => @source, 
+           :locals => { :link_title => false }) %>
+<%= link_to '&larr;', sources_path %>&nbsp;
+<%= link_to '&uarr;', @source.category %>

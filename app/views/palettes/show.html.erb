@@ -1,0 +1,10 @@
+<table class="palette">
+  <tr>
+  <% @palette.colours.each do |colour| %>
+    <td style="background-color: <%= colour.to_html_colour %>;">
+      <%= link_to '&nbsp;', colour %>
+    </td>
+  <% end %>
+  </tr>
+</table>
+<%= link_to '&larr;', palettes_path %>&nbsp;<%= link_to '&uarr;', @palette.source %>

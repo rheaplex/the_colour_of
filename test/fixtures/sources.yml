@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  category: 1
+  last_palette_hash: 1
+
+two:
+  name: MyString
+  category: 1
+  last_palette_hash: 1

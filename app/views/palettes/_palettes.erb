@@ -1,0 +1,11 @@
+<table class="palette">
+  <% palettes.each do |palette| %>
+  <tr onMouseOver="this.className='palover'" onMouseOut="this.className=''">
+    <% palette.sorted_colours.each do |colour| %>
+    <td style="background-color: <%= colour.to_html_colour %>;">
+      <%= link_to '&nbsp;', palette %>
+    </td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>

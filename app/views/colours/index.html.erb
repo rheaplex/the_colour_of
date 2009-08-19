@@ -1,0 +1,9 @@
+<table class="colours">
+  <% @colours.each do |colour| %>
+    <tr>
+      <td style="background-color: <%= colour.to_html_colour %>;">
+        <%= link_to '&nbsp', colour %>
+      </td>
+    </tr>
+  <% end %>
+</table>
