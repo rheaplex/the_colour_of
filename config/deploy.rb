@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+################################################################################
+# Config
+################################################################################
+
 set :application, "the_colour_of"
 set :deploy_to, "/home/robmyers/daemons/#{application}"
 
@@ -21,18 +25,15 @@ set :scm, "git"
 set :branch, "master"
 set :repository,  "http://robmyers.org/git/the_colour_of.git"
 
-
-#set :deploy_via, :remote_cache
-
-#default_run_options[:pty] = true
-#ssh_options[:forward_agent] = true
-
-#load 'ext/rails-database-migrations.rb'
-#load 'ext/rails-shared-directories.rb'
 set :runner, "robmyers"
-role :web, "robmyers.vm.bytemark.co.uk"
-role :app, "robmyers.vm.bytemark.co.uk"
-role :db, "robmyers.vm.bytemark.co.uk"
+set :domain, "robmyers.vm.bytemark.co.uk"
+role :web, domain
+role :app, domain
+role :db, domain, :primary => true
+
+################################################################################
+# Rake
+################################################################################
 
 namespace :install_rake_task do
   task :add_cron_job do
@@ -47,7 +48,23 @@ namespace :install_rake_task do
 end
 
 namespace :rake do
-  task :show_tasks do
+  task :populate_db do
     run("cd #{deploy_to}/current; rake populate_db")
+  end
+end
+
+################################################################################
+# Passenger
+################################################################################
+
+namespace :deploy do
+  desc "Restarting mod_rails with restart.txt"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "touch #{current_path}/tmp/restart.txt"
+  end
+
+  [:start, :stop].each do |t|
+    desc "#{t} task is a no-op with mod_rails"
+    task t, :roles => :app do ; end
   end
 end
