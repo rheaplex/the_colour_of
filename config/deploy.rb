@@ -71,3 +71,17 @@ namespace :deploy do
     run "touch #{current_release}/tmp/restart.txt"
   end
 end
+
+################################################################################
+# Configure the db yaml
+################################################################################
+
+namespace :deploy do
+  task :after_update_code do
+    db_yml_path = "#{current_path}/db/database.yml"
+    db.yml = IO.read(db_yml_path)
+    db_yml.sub!(/username:.*/, "username: #{Capistrano::CLI.ui.ask('Enter MySQL database user: ')}")
+    db.yml.sub!(/password:.*/, "password: #{Capistrano::CLI.ui.ask('Enter MySQL database password: ')}")
+    File.open(db_yml_path, 'w') {|f| f.write(db_yml) }
+  end
+end
