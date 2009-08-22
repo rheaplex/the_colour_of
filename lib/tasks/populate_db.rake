@@ -64,7 +64,7 @@ namespace :db do
     
      # Xinhua's front page is too hard to parse
     xinhua = Source.new
-    xinhua.category = new
+    xinhua.category = news
     xinhua.name = "China News Service"
     xinhua.page_url = "http://www.chinanews.com.cn/"
     xinhua.image_regex = "pics\s*=\s*[\"']([^\"']+?.jpe?g)"
