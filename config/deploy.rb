@@ -78,7 +78,7 @@ end
 
 namespace :deploy do
   task :after_update_code do
-    db_yml_path = "#{current_path}/db/database.yml"
+    db_yml_path = "#{current_path}/config/database.yml"
     db_yml = IO.read(db_yml_path)
     db_yml.sub!(/username:.*/, "username: #{Capistrano::CLI.ui.ask('Enter MySQL database user: ')}")
     db.yml.sub!(/password:.*/, "password: #{Capistrano::CLI.ui.ask('Enter MySQL database password: ')}")
