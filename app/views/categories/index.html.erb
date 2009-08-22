@@ -1,6 +1,3 @@
-<h1>Categories</h1>
-<blockquote>
 <% @categories.each do |category| %>
-  <h2><%= link_to category.name, category %></h2>
+<h1><%= link_to "The Colour of #{category.name}", category %></h1>
 <% end %>
-</blockquote>
