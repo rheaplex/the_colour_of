@@ -40,7 +40,7 @@ class SourceUpdater
     if ((groups.length == 0) or (groups[0].length == 0))
       raise "Couldn't get image url for " + @source.name
     end
-    logger.debug groups[0][0]
+    Rails.logger.debug groups[0][0]
     url = groups[0][0]
     # If it's a server absolute url, prepend the server url
     if url.starts_with? '/'
@@ -78,9 +78,9 @@ class SourceUpdater
     result = false
     if(hash != @source.last_palette_hash)
       result = true
-      logger.debug "Changed"
+      Rails.logger.debug "Changed"
     else
-      logger.debug "Not changed"
+      Rails.logger.debug "Not changed"
     end
     return result
   end
@@ -140,7 +140,7 @@ namespace :scrape do
         rescue ActiveRecord::RecordInvalid => invalid
           message = "Transaction failed" + invalid + "\n"
           # Write to error log file
-          logger.error message
+          Rails.logger.error message
           # Write to stdout so cron emails the error
           print message
         end
