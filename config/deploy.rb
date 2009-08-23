@@ -41,7 +41,7 @@ namespace :install_rake_task do
     # run crontab -l or echo '' instead because the crontab command will fail if the user has no pre-existing crontab file.
     # in this case, echo '' is run and the cap recipe won't fail altogether.
     run "(crontab -l || echo '') | grep -v 'rake scrape' > #{tmpname}"
-    run "echo '@hourly cd #{current_path} && RAILS_ENV=production rake my_rake_task' >> #{tmpname}"
+    run "echo '@hourly cd #{current_path} && RAILS_ENV=production rake scrape:scrape' >> #{tmpname}"
     run "crontab #{tmpname}"
     run "rm #{tmpname}"
   end
@@ -49,7 +49,7 @@ end
 
 namespace :rake do
   task :populate_db do
-    run("cd #{deploy_to}/current; rake populate_db")
+    run("cd #{current_path}; RAILS_ENV=production rake db:populate")
   end
 end
 
@@ -78,10 +78,9 @@ end
 
 namespace :deploy do
   task :after_update_code do
-    db_yml_path = "#{current_path}/config/database.yml"
-    db_yml = IO.read(db_yml_path)
+    db_yml = IO.read(File.join(File.dirname(__FILE__), 'database.yml'))
     db_yml.sub!(/username:.*/, "username: #{Capistrano::CLI.ui.ask('Enter MySQL database user: ')}")
-    db.yml.sub!(/password:.*/, "password: #{Capistrano::CLI.ui.ask('Enter MySQL database password: ')}")
-    File.open(db_yml_path, 'w') {|f| f.write(db_yml) }
+    db_yml.sub!(/password:.*/, "password: #{Capistrano::CLI.ui.ask('Enter MySQL database password: ')}")
+    put db_yml, "#{current_release}/config/database.yml"
   end
 end
