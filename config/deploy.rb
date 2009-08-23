@@ -41,7 +41,7 @@ namespace :install_rake_task do
     # run crontab -l or echo '' instead because the crontab command will fail if the user has no pre-existing crontab file.
     # in this case, echo '' is run and the cap recipe won't fail altogether.
     run "(crontab -l || echo '') | grep -v 'rake scrape' > #{tmpname}"
-    run "echo '@hourly cd #{current_path} && RAILS_ENV=production rake scrape:scrape' >> #{tmpname}"
+    run "echo '@hourly cd #{current_path} && RAILS_ENV=production /var/lib/gems/1.8/bin/rake scrape:scrape' >> #{tmpname}"
     run "crontab #{tmpname}"
     run "rm #{tmpname}"
   end
