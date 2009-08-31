@@ -1,6 +1,6 @@
 <table class="palette">
   <tr>
-  <% @palette.colours.each do |colour| %>
+  <% @palette.sorted_colours.each do |colour| %>
     <td style="background-color: <%= colour.to_html_colour %>;">
       <%= link_to '&nbsp;', colour %>
     </td>
