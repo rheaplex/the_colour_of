@@ -15,14 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'rubygems'
-require 'rio'
+
+require 'net/http'
 require 'RMagick'
 
 # So we have access to RMagick constants
 include Magick
 
 # Cron task, set correct app path and database
-# */1 0 * * * cd /path/to/rails_app/ && /usr/local/bin/rake RAILS_ENV=debug scrape:scrape
+# */1 0 * * * cd /path/to/rails_app/ && /usr/bin/rake RAILS_ENV=development scrape:scrape
 
 
 class SourceUpdater
@@ -32,7 +33,7 @@ class SourceUpdater
   end
   
   def url_from_page()
-    html = rio(@source.page_url).binmode.read
+    html = Net::HTTP.get_response(URI.parse(@source.page_url)).body
     if not html
       raise "Couldn't get html for " + @source.name
     end
@@ -50,11 +51,11 @@ class SourceUpdater
   end
 
   def image_from_url(image_url)
-    url_stream = rio(image_url).binmode
-    if not url_stream
+    url_data = Net::HTTP.get_response(URI.parse(image_url)).body
+    if not url_data
       raise "Couldn't get image stream for " + image_url
     end
-    Magick::Image.from_blob(url_stream.read).first
+    Magick::Image.from_blob(url_data).first
   end
 
   def palette_from_image(original_image, max_colours)
