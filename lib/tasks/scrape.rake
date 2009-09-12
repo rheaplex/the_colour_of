@@ -31,9 +31,19 @@ class SourceUpdater
   def initialize(source)
     @source = source
   end
+
+  def slurp_url (url)    
+    uri = URI.parse(URI.escape(url))  
+    req = Net::HTTP::Get.new(uri.to_s)  
+    
+    http = Net::HTTP.new(uri.host, uri.port)  
+    http.read_timeout = 20  
+    http.open_timeout = 20
+    http.request(req).body
+  end
   
   def url_from_page()
-    html = Net::HTTP.get_response(URI.parse(@source.page_url)).body
+    html = slurp_url(@source.page_url)
     if not html
       raise "Couldn't get html for " + @source.name
     end
@@ -51,7 +61,7 @@ class SourceUpdater
   end
 
   def image_from_url(image_url)
-    url_data = Net::HTTP.get_response(URI.parse(image_url)).body
+    url_data = slurp_url(image_url)
     if not url_data
       raise "Couldn't get image stream for " + image_url
     end
