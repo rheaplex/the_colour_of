@@ -36,9 +36,9 @@ class SourceUpdater
     uri = URI.parse(URI.escape(url))  
     req = Net::HTTP::Get.new(uri.to_s)  
     
-    http = Net::HTTP.new(uri.host, uri.port)  
-    http.read_timeout = 20  
-    http.open_timeout = 20
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.open_timeout = 60
+    http.read_timeout = 600
     http.request(req).body
   end
   
