@@ -16,6 +16,7 @@
 
 require 'rubygems'
 
+require 'uri'
 require 'net/http'
 require 'RMagick'
 
@@ -37,8 +38,8 @@ class SourceUpdater
     req = Net::HTTP::Get.new(uri.to_s)  
     
     http = Net::HTTP.new(uri.host, uri.port)
-    http.open_timeout = 60
-    http.read_timeout = 600
+    http.open_timeout = 120
+    http.read_timeout = 120
     http.request(req).body
   end
   
@@ -55,7 +56,9 @@ class SourceUpdater
     url = groups[0][0]
     # If it's a server absolute url, prepend the server url
     if url.starts_with? '/'
-        url = @source.page_url + url[1..-1]
+      # Strip any path component from the server url and glue on the image url
+      source_uri = URI.parse(@source.page_url)
+      url = source_uri.scheme + '://' +source_uri.host + url[1..-1]
     end
     url
   end
@@ -124,14 +127,24 @@ class SourceUpdater
   end
 
   def update()
-    url = url_from_page
-    image = image_from_url(url)
-    colours = palette_from_image(image, 12)
-    hash = url.hash
-    if(hash_changed?(hash)) 
-      insert_palette(colours, hash)
-      update_hash(hash)
-    end
+    # Catch exceptions, other updates may succeed and we don't want to stop them
+    begin
+      url = url_from_page
+      image = image_from_url(url)
+      colours = palette_from_image(image, 12)
+      hash = url.hash
+      if(hash_changed?(hash)) 
+        insert_palette(colours, hash)
+        update_hash(hash)
+      end
+    rescue Exception => problem
+      message = "Updating Source Palette for " + @source.name +  " failed " + 
+      	      	problem + "\n"
+      # Write to error log file
+      Rails.logger.error message
+      # Write to stdout so cron emails the error
+      print message
+    end   
   end
   
 end

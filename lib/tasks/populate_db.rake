@@ -14,82 +14,101 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+def ensure_category(name)
+  category = Category.find_by_name(name)
+  if not category
+    category = Category.new
+    category.name = name
+    category.save!
+  end
+  category
+end
+
+def ensure_source(category, name, url, regex)
+  source = Source.find_by_name(name)
+  if not source
+    source = Source.new
+    source.category = category
+    source.name = name
+    source.page_url = url
+    source.image_regex = regex
+    source.last_palette_hash = 0
+    source.save!
+  end
+  source
+end
+
 namespace :db do
   desc "Insert categories and sources."
   task(:populate  => :environment) do
-    news_name = "News"
-    news = Category.find_by_name(news_name)
-    if not news
-      news = Category.new
-      news.name = news_name
-      news.save!
-    end
     
-    bbc_name = "BBC News"
-    if not Source.find_by_name(bbc_name)
-      bbc = Source.new
-      bbc.category = news
-      bbc.name = bbc_name
-      bbc.page_url = "http://news.bbc.co.uk/"
-      bbc.image_regex = "src\s*=\s*[\"'](http://newsimg.bbc.co.uk/media/images/[^\"']+.jpe?g)[\"']"
-      bbc.last_palette_hash = 0
-      bbc.save!
-    end
+    # News
     
-    aljazeera_name = "Al Jazeera"
-    if not Source.find_by_name(aljazeera_name)
-      aljazeera = Source.new
-      aljazeera.category = news
-      aljazeera.name = aljazeera_name
-      aljazeera.page_url = "http://english.aljazeera.net/"
-      aljazeera.image_regex = "src\s*=\s*[\"'](/mritems/Images/[^\"']+.jpe?g)[\"']"
-      aljazeera.last_palette_hash = 0
-      aljazeera.save!
-    end
+    news = ensure_category("News")
     
-    cnn_name = "CNN"
-    if not Source.find_by_name(cnn_name)
-      cnn = Source.new
-      cnn.category = news
-      cnn.name = cnn_name
-      cnn.page_url = "http://www.cnn.com/"
-      cnn.image_regex = "src\s*=\s*[\"']([^\"']+cnn[^\"']+.jpe?g)[\"']"
-      cnn.last_palette_hash = 0
-      cnn.save!
-    end
+    ensure_source(news, "BBC News", "http://news.bbc.co.uk/",
+                  "src\s*=\s*[\"'](http://newsimg.bbc.co.uk/media/images/[^\"']+.jpe?g)[\"']")
     
-    times_name = "The Times Of India"
-    if not Source.find_by_name(times_name)
-      times = Source.new
-      times.category = news
-      times.name = times_name
-      times.page_url = "http://timesofindia.indiatimes.com/"
-      times.image_regex = "style=[\"']display:none[\"']\s+src\s*=\s*[\"'](/photo/[^\"']+.cms)[\"']"
-        times.last_palette_hash = 0
-      times.save!
-    end
+    ensure_source(news, "Al Jazeera", "http://english.aljazeera.net/",
+                  "src\s*=\s*[\"'](/mritems/Images/[^\"']+.jpe?g)[\"']")
+                  
+    ensure_source(news, "CNN", "http://www.cnn.com/",
+                  "src\s*=\s*[\"']([^\"']+cnn[^\"']+.jpe?g)[\"']")
     
-    tass_name = "ITAR-TASS"
-    if not Source.find_by_name(tass_name)
-      tass = Source.new
-      tass.category = news
-      tass.name = tass_name
-      tass.page_url = "http://www.itar-tass.com/"
-      tass.image_regex = "hspace[^>]+vspace[^>]+src\s*=\s*[\"'](http://www.itar-tass.com/img/[^\"']+.jpe?g)[\"']"
-      tass.last_palette_hash = 0
-      tass.save!
-    end
+    ensure_source(news, "The Times Of India",
+                  "http://timesofindia.indiatimes.com/",
+                  "style=[\"']display:none[\"']\s+src\s*=\s*[\"'](/photo/[^\"']+.cms)[\"']")
+    
+    ensure_source(news, "ITAR-TASS", "http://www.itar-tass.com/",
+                  "hspace[^>]+vspace[^>]+src\s*=\s*[\"'](http://www.itar-tass.com/img/[^\"']+.jpe?g)[\"']")
     
     # Xinhua's front page is too hard to parse
-    xinhua_name = "China News Service"
-    if not Source.find_by_name(xinhua_name)
-      xinhua = Source.new
-      xinhua.category = news
-      xinhua.name = xinhua_name 
-      xinhua.page_url = "http://www.chinanews.com.cn/"
-      xinhua.image_regex = "pics\s*=\s*[\"']([^\"']+?.jpe?g)"
-      xinhua.last_palette_hash = 0
-      xinhua.save!
-    end
+    ensure_source(news, "China News Service", "http://www.chinanews.com.cn/",
+      xinhua.image_regex = "pics\s*=\s*[\"']([^\"']+?.jpe?g)")
+
+    # Art
+    
+    art = ensure_category("Art")
+    
+    ensure_source(art, "NewsGrist", "http://newsgrist.typepad.com/",
+                  "src=\"http://newsgrist.typepad.com/.a/([^\"]+)\"")
+    
+    ensure_source(art, "Art Fag City", "http://www.artfagcity.com/",
+                  "src=\"http://www.artfagcity.com/wordpress_core/wp-content/uploads/[^/]+/([^\"]+)\"")
+    
+    ensure_source(art, "Furtherfield", "http://www.furtherfield.org/",
+                  "src=['\"]http://www.furtherfield.org/pics/([^\"]+)['\"]")
+    
+    ensure_source(art, "Frieze", "http://frieze.com/",
+                  "src=\"/images/front/([^\"]+)\"")
+    
+    ensure_source(art, "We Make Money Not Art",
+                  "http://www.we-make-money-not-art.com/", 
+                  "src=\"wow/([\"]+)\"")
+    
+    # Grab images from the feed, not the page
+#    ensure_source(art, "The Tate",
+#                  "http://tate.org.uk/homepage/tateonlinehomepageannouncement.xml"
+#                  "\"[^/]+/home/homepage_features/([^<]+)\"")
+
+    # Technology
+    
+    technology = ensure_category("Technology")
+    
+    ensure_source(technology, "Wired", "http://www.wired.com/",
+                  "src=\"/images/index/..../../([^\"]+)\"")
+    
+    ensure_source(technology, "Apple", "http://www.apple.com/",
+                  "src=\"http://images.apple.com/home/images/([^\"]+)\"")
+    
+    ensure_source(technology, "Microsoft", "http://www.microsoft.com/",
+                  "\"http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/([^\"]+)\"")
+    
+    #ensure_source(technology, "", "", "")
+    
+    #ensure_source(technology, "", "", "")
+    
+    #ensure_source(technology, "", "", "")
+    
   end
 end
