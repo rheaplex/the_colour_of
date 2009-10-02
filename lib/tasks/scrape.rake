@@ -58,7 +58,7 @@ class SourceUpdater
     if url.starts_with? '/'
       # Strip any path component from the server url and glue on the image url
       source_uri = URI.parse(@source.page_url)
-      url = source_uri.scheme + '://' +source_uri.host + url[1..-1]
+      url = source_uri.scheme + '://' +source_uri.host + url[0..-1]
     end
     url
   end
