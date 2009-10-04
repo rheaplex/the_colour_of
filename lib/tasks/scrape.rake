@@ -33,13 +33,14 @@ class SourceUpdater
     @source = source
   end
 
-  def slurp_url (url)    
+  def slurp_url (url)
+    print "----->" + url + "\n"
     uri = URI.parse(URI.escape(url))  
     req = Net::HTTP::Get.new(uri.to_s)  
     
     http = Net::HTTP.new(uri.host, uri.port)
-    http.open_timeout = 120
-    http.read_timeout = 120
+    http.open_timeout = 300
+    http.read_timeout = 300
     http.request(req).body
   end
   
@@ -53,14 +54,7 @@ class SourceUpdater
       raise "Couldn't get image url for " + @source.name
     end
     Rails.logger.debug groups[0][0]
-    url = groups[0][0]
-    # If it's a server absolute url, prepend the server url
-    if url.starts_with? '/'
-      # Strip any path component from the server url and glue on the image url
-      source_uri = URI.parse(@source.page_url)
-      url = source_uri.scheme + '://' +source_uri.host + url[0..-1]
-    end
-    url
+    @source.image_url_prefix + groups[0][0]
   end
 
   def image_from_url(image_url)
@@ -144,6 +138,7 @@ class SourceUpdater
       Rails.logger.error message
       # Write to stdout so cron emails the error
       print message
+      print problem.backtrace.join("\n")
     end   
   end
   

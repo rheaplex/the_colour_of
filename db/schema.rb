@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090724202959) do
+ActiveRecord::Schema.define(:version => 20091004133605) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20090724202959) do
     t.integer  "last_palette_hash"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_url_prefix"
   end
 
 end
