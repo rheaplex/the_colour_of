@@ -25,7 +25,10 @@ def ensure_category(name)
 end
 
 def ensure_source(category, name, url, prefix, regex)
-  source = Source.find_by_name(name) or Source.new
+  source = Source.find_by_name(name) 
+  if not source
+    source = Source.new
+  end
   source.category = category
   source.name = name
   source.page_url = url
