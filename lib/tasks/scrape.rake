@@ -34,7 +34,7 @@ class SourceUpdater
   end
 
   def slurp_url (url)
-    print "----->" + url + "\n"
+    #print "----->" + url + "\n"
     uri = URI.parse(URI.escape(url))  
     req = Net::HTTP::Get.new(uri.to_s)  
     
@@ -138,7 +138,7 @@ class SourceUpdater
       Rails.logger.error message
       # Write to stdout so cron emails the error
       print message
-      print problem.backtrace.join("\n")
+      #print problem.backtrace.join("\n")
     end   
   end
   
