@@ -146,12 +146,98 @@ namespace :db do
                   "http://www.microsoft.com/en/us/default.aspx",
                   "",
                   "(http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/[^\"]+)")
+   
+    ensure_source(technology, 
+                  "Gizmodo", 
+                  "http://gizmodo.com/", 
+                  "", 
+                  "src=\"([^\"]+/images/[^\"]+\.jpg)\"")
     
-    #ensure_source(technology, "", "", "")
+    ensure_source(technology, 
+                  "TechCrunch", 
+                  "http://www.techcrunch.com/", 
+                  "", 
+                  "src=\"(http://[^\"]+/wp-content/uploads/[^\"]+)\"")
     
-    #ensure_source(technology, "", "", "")
+    ensure_source(technology, 
+                  "Make Magazine", 
+                  "http://makezine.com/",
+                  "http://makezine.com/", 
+                  "src=\"/(images/feature/[^\"]+)\"")
     
-    #ensure_source(technology, "", "", "")
+    # Music
     
+    music = ensure_category("Music")
+    
+    ensure_source(music,
+                  "The NME",
+                  "http://www.nme.com/home",
+                  "",
+                  "src=\"([^\"]+/images/thumbnail/[^\"]+)\"")
+    
+    ensure_source(music,
+                  "The Quietus",
+                  "http://thequietus.com/",
+                  "",
+                  "src=\"(http://new.assets.thequietus.com/images/articles/[^\"]+)\"")
+    
+    ensure_source(music,
+                  "Pitchfork Media",
+                  "http://pitchfork.com/",
+                  "",
+                  "src=\"(http://cdn\.pitchfork\.com/media/[^\"]+.jpg)\"")
+    
+    ensure_source(music,
+                  "Billboard 200",
+                  "http://www.billboard.com/charts/billboard-200",
+                  "",
+                  "src=\"(http://www\.billboard\.com/images/[^\"]+)\"")
+    
+    ensure_source(music,
+                  "iTunes",
+                  "http://www.apple.com/itunes/charts/songs/",
+                  "",
+                  "src=\"([^\"]+/Music/[^\"]+\.jpg)\"")
+    
+    ensure_source(music,
+                  "The Wire",
+                  "http://www.thewire.co.uk/articles/web_exclusive/",
+                  "http://www.thewire.co.uk/",
+                  "src=\"/(images/the_wire/[^\"]+)\"")
+    
+    # Dot Coms
+    
+    dotcoms = ensure_category("Dot Coms")
+    
+    ensure_source(dotcoms,
+                  "Google",
+                  "http://www.google.co.uk/",
+                  "http://www.google.com/",
+                  "img alt=\"Google\".+?src=\"/([^\"]+)\"")
+    
+    ensure_source(dotcoms,
+                  "Yahoo!",
+                  "http://m.uk.yahoo.com/?p=us",
+                  "",
+                  "src=\"([^\"]+yimg[^\"]+\.jpg)\" alt=")
+    
+    ensure_source(dotcoms,
+                  "MySpace",
+                  "http://www.myspace.com/",
+                  "",
+                  "img[^>]+src=\"([^\"]+)\"")
+    
+    ensure_source(dotcoms,
+                  "Amazon",
+                  "http://www.amazon.com/",
+                  "",
+                  "bannerImage.+?src=\"([^\"]+\.jpg)\"")
+    
+    ensure_source(dotcoms,
+                  "eBay",
+                  "http://deals.ebay.com/",
+                  "",
+                  "src=\"([^\"]+ebayimg[^\"]+)\"")
+        
   end
 end
