@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class ColoursController < ApplicationController
+  
   # GET /colours
   # GET /colours.xml
   def index
-    @colours = Colour.find(:all, :limit => 50)#paginate :page => params[:page], :order => 'updated_at DESC'
+    @colours = Colour.paginate(:page => params[:page], 
+                               :order => 'updated_at DESC')
 
     respond_to do |format|
       format.html # index.html.erb

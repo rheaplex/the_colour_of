@@ -1,29 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :colours
 
-  map.resources :colours
-
   map.resources :palettes
 
-  map.resources :palettes
-
-  map.resources :colours
-
-  map.resources :colours
-
   map.resources :sources
-
-  map.resources :sources
-
-  map.resources :sources
-
-  map.resources :sources
-
-  map.resources :sources
-
-  map.resources :colours
-
-  map.resources :palettes
 
   map.resources :sources
 

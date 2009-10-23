@@ -19,6 +19,9 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
+  
+  config.gem('will_paginate', :version => '~> 2.3.11', 
+             :source => 'http://gemcutter.org')
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
@@ -42,3 +45,5 @@ Rails::Initializer.run do |config|
   # Set the subdirectory url path for the application
   config.action_controller.relative_url_root = "/the_colour_of"
 end
+
+require "will_paginate"

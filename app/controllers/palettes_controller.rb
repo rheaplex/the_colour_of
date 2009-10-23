@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class PalettesController < ApplicationController
+  
   # GET /palettes
   # GET /palettes.xml
   def index
-    @palettes = Palette.paginate :page => params[:page], :order => 'updated_at DESC'
+    @palettes = Palette.paginate(:page => params[:page],
+                                 :order => 'updated_at DESC')
     
     respond_to do |format|
       format.html # index.html.erb

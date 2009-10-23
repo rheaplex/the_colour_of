@@ -1,2 +1,4 @@
 <%= render(:partial => "palettes/palettes", :object => @palettes) %>
-<%= will_paginate @posts %>
+<%= will_paginate @palettes, :prev_label => '&laquo;&laquo;',
+                  :previous_label => '&laquo;&laquo;',
+                  :next_label => '&raquo;&raquo;'%>
