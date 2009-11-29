@@ -63,12 +63,12 @@ namespace :db do
     ensure_source(news,
                   "CNN", "http://www.cnn.com/",
                   "",
-                  "src\s*=\s*[\"']([^\"']+cnn[^\"']+.jpe?g)[\"']")
+                  "src\s*=\s*[\"']([^\"']*/photo/[^\"']+.cms)[\"']\s+id=\s*\"showcaseimg1\"")
     
     ensure_source(news, 
-                  "The Times Of India",
-                  "http://timesofindia.indiatimes.com/",
-                  "http://timesofindia.indiatimes.com/",
+                  "Indiatimes",
+                  "http://www.indiatimes.com/",
+                  "",
                   "style=[\"']display:none[\"']\s+src\s*=\s*[\"'](/photo/[^\"']+.cms)[\"']")
     
     ensure_source(news,
@@ -86,12 +86,13 @@ namespace :db do
     # Art
     
     art = ensure_category("Art")
-    
-    ensure_source(art,
-                  "NewsGrist",
-                  "http://newsgrist.typepad.com/",
-                  "",
-                  "src=\"(http://newsgrist.typepad.com/.a/[^\"]+)\"")
+
+# Weird, we seem to be blocked when using the Ruby url lib    
+#    ensure_source(art,
+#                  "NewsGrist",
+#                  "http://newsgrist.typepad.com/",
+#                  "",
+#                  "<div class=\"entry-body\">.*?src="[^]"")
     
     ensure_source(art,
                   "Art Fag City",
@@ -103,13 +104,13 @@ namespace :db do
                   "Furtherfield",
                   "http://www.furtherfield.org/",
                   "",
-                  "src=['\"](http://www.furtherfield.org/pics/[^'\"]+)['\"]")
+                  "<div\s+id\s*=\s*['\"]review_image['\"]><img[^>]+src=['\"]([^'\"]+)\['\"]")
     
     ensure_source(art,
                   "Frieze",
-                  "http://frieze.com/magazine/",
                   "http://frieze.com/",
-                  "src=\"/(images/front/[^\"]+)\"")
+                  "",
+                  "<a href=\"/magazine/\"><img src=\"http://www.frieze.com/images/middle/[^\"]+\"")
     
     ensure_source(art,
                   "We Make Money Not Art",
@@ -117,13 +118,19 @@ namespace :db do
                   "http://www.we-make-money-not-art.com/",
                   "src=\"(wow/[^\"]+)\"")
     
-    # Grab images from the feed, not the page
+    # No non-js images
     ensure_source(art,
                   "The Tate",
                   "http://tate.org.uk/homepage/tateonlinehomepageannouncement.xml", 
                   "http://tate.org.uk/",
                   ">/([^<]+\.(jpg|png))<")
 
+    # Only gallery in London we can scrape. Tate, ica, saatchi all fail
+    ensure_source(art,
+                  "Whitechapel Gallery",
+                  "http://www.whitechapelgallery.org/home",
+                  "http://www.whitechapelgallery.org/",
+                  "url\\(['\"](/images/plinth_advert/[^'\"]+)['\"']\\)")
     # Technology
     
     technology = ensure_category("Technology")
@@ -138,14 +145,14 @@ namespace :db do
                   "Apple",
                   "http://www.apple.com/",
                   "",
-                  "src=\"(http://images.apple.com/home/images/[^\"]+)\"")
+                  "#billboard[^\\(]+url\\(([^)]+)\\)")
     
     ensure_source(technology,
                   "Microsoft",
                   # We won't get here automatically as the redirect is in html
                   "http://www.microsoft.com/en/us/default.aspx",
                   "",
-                  "(http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/[^\"]+)")
+                  "(http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/[^\"]+\.jpg)")
    
     ensure_source(technology, 
                   "Gizmodo", 
@@ -158,12 +165,13 @@ namespace :db do
                   "http://www.techcrunch.com/", 
                   "", 
                   "src=\"(http://[^\"]+/wp-content/uploads/[^\"]+)\"")
-    
+
+    # Use the rss feed    
     ensure_source(technology, 
                   "Make Magazine", 
-                  "http://makezine.com/",
-                  "http://makezine.com/", 
-                  "src=\"/(images/feature/[^\"]+)\"")
+                  "http://blog.makezine.com/index.xml",
+                  "", 
+                  "img[^>]+src=\"([^\"]+)\"")
     
     # Music
     
@@ -227,12 +235,14 @@ namespace :db do
                   "",
                   "img[^>]+src=\"([^\"]+)\"")
     
+    # Use the bestsellers, as they are easier to grab and change more often
     ensure_source(dotcoms,
                   "Amazon",
-                  "http://www.amazon.com/",
+                  "http://www.amazon.com/bestsellers",
                   "",
-                  "bannerImage.+?src=\"([^\"]+\.jpg)\"")
+                  "img\s+class\s*=\s*\"prodImage\"\s+src\s*=\s*\"([^\"]+)\"")
     
+    # The deals page is easier to scrape
     ensure_source(dotcoms,
                   "eBay",
                   "http://deals.ebay.com/",
