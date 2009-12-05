@@ -63,13 +63,13 @@ namespace :db do
     ensure_source(news,
                   "CNN", "http://www.cnn.com/",
                   "",
-                  "src\s*=\s*[\"']([^\"']*/photo/[^\"']+.cms)[\"']\s+id=\s*\"showcaseimg1\"")
+                  "src\s*=\s*[\"']([^\"']+cnn[^\"']+.jpe?g)[\"']")
     
     ensure_source(news, 
                   "Indiatimes",
                   "http://www.indiatimes.com/",
                   "",
-                  "style=[\"']display:none[\"']\s+src\s*=\s*[\"'](/photo/[^\"']+.cms)[\"']")
+                  "src\s*=\s*[\"']([^\"']/photo/[^\"']+.cms)[\"']")
     
     ensure_source(news,
                   "ITAR-TASS", "http://www.itar-tass.com/",
@@ -110,7 +110,7 @@ namespace :db do
                   "Frieze",
                   "http://frieze.com/",
                   "",
-                  "<a href=\"/magazine/\"><img src=\"http://www.frieze.com/images/middle/[^\"]+\"")
+                  "<a href=\"/magazine/\"><img src=\"(http://www.frieze.com/images/[^\"]+)\"")
     
     ensure_source(art,
                   "We Make Money Not Art",
@@ -119,11 +119,11 @@ namespace :db do
                   "src=\"(wow/[^\"]+)\"")
     
     # No non-js images
-    ensure_source(art,
-                  "The Tate",
-                  "http://tate.org.uk/homepage/tateonlinehomepageannouncement.xml", 
-                  "http://tate.org.uk/",
-                  ">/([^<]+\.(jpg|png))<")
+#    ensure_source(art,
+#                  "The Tate",
+#                  "http://tate.org.uk/homepage/tateonlinehomepageannouncement.xml", 
+#                  "",
+#                  ">/([^<]+\.(jpg|png))<")
 
     # Only gallery in London we can scrape. Tate, ica, saatchi all fail
     ensure_source(art,
@@ -147,12 +147,14 @@ namespace :db do
                   "",
                   "#billboard[^\\(]+url\\(([^)]+)\\)")
     
-    ensure_source(technology,
-                  "Microsoft",
+    # Always errors when called from server
+    # So ignore
+    #ensure_source(technology,
+    #              "Microsoft",
                   # We won't get here automatically as the redirect is in html
-                  "http://www.microsoft.com/en/us/default.aspx",
-                  "",
-                  "(http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/[^\"]+\.jpg)")
+    #              "http://www.microsoft.com/en/us/default.aspx",
+    #              "",
+    #              "(http://i.microsoft.com/global/En/us/PublishingImages/SLWindowPane/[^\"]+\.jpg)")
    
     ensure_source(technology, 
                   "Gizmodo", 
